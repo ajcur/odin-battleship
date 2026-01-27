@@ -1,57 +1,77 @@
 import { Ship } from "./ship.js";
 
-class Position {
-  constructor() {
-    this.ship = null;
-    this.occupied = false;
-    this.hit = false;
-  }
-
-  set ship(newShip) {
-    this._ship = newShip;
-    this.occupied = true;
-  }
-
-  get ship() {
-    return this._ship;
-  }
+function createShip(length) {
+  return new Ship(length);
 }
 
 class Gameboard {
-  constructor() {
-    this.board = (function () {
-      let board = [];
-      for (let i = 0; i < 10; i++) {
-        board[i] = [];
-        for (let j = 0; j < 10; j++) {
-          board[i][j] = new Position();
+  constructor(createShipFn = createShip) {
+    this.board = Array(10)
+      .fill()
+      .map(() => Array(10).fill(null));
+    this.createShipFn = createShipFn;
+    this.ships = [];
+  }
+
+  placeShip(length, x, y, direction) {
+    let newShip = this.createShipFn(length);
+
+    if (direction === "horizontal") {
+      for (let i = x; i < x + length; i++) {
+        if (this.isOccupied(i, y)) {
+          throw new Error("At least one of these spaces is already occupied!");
         }
       }
-      return board;
-    })();
-  }
-
-  placeShip(length, position, direction) {
-    let horizontalCoordinate = position[0];
-    let verticalCoordinate = position[1];
-
-    let newShip = new Ship(length);
-
-    for (let i = 0; i < length; i++) {
-      this.board[horizontalCoordinate][verticalCoordinate].ship = newShip;
-      if (direction === "horizontal") {
-        verticalCoordinate++;
-      } else {
-        horizontalCoordinate++;
+      for (let i = x; i < x + length; i++) {
+        this.board[x][y] = newShip;
+      }
+    } else if (direction === "vertical") {
+      for (let i = y; i < y + length; i++) {
+        if (this.isOccupied(x, i)) {
+          throw new Error("At least one of these spaces is already occupied!");
+        }
+      }
+      for (let i = y; i < y + length; i++) {
+        this.board[x][y] = newShip;
       }
     }
+
+    // for (let i = 0; i < length; i++) {
+    //   if (this.isOccupied(x, y)) {
+    //     throw new Error("At least one of these spaces is already occupied!");
+    //   }
+    //   if (direction === "horizontal") {
+    //     y++;
+    //   } else x++;
+    // }
+
+    // let newShip = this.createShipFn(length);
+
+    for (let j = 0; j < length; j++) {
+      this.board[x][y] = newShip;
+      if (direction === "horizontal") {
+        y++;
+      } else x++;
+    }
+
+    this.ships.push(newShip);
   }
 
-  isOccupied(position) {
-    let horizontalCoordinate = position[0];
-    let verticalCoordinate = position[1];
+  isOccupied(x, y) {
+    return this.board[x][y] !== null && this.board[x][y] !== "miss";
+  }
 
-    return this.board[horizontalCoordinate][verticalCoordinate].occupied;
+  receiveAttack(x, y) {
+    if (this.board[x][y] === "miss") {
+      throw new Error("This field has already been hit.");
+    }
+    if (this.isOccupied(x, y)) {
+      this.board[x][y].hit();
+    } else this.board[x][y] = "miss";
+  }
+
+  allSunk() {
+    return this.ships.every((ship) => ship.sunk === true);
   }
 }
 
