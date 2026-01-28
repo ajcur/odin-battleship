@@ -11,7 +11,7 @@ class Gameboard {
 
   placeShip(length, x, y, direction) {
     this.#checkPlacement(length, x, y, direction);
-    let newShip = this.createShip(length);
+    let newShip = new this.createShip(length);
 
     for (let i = 0; i < length; i++) {
       this.board[x][y] = newShip;
