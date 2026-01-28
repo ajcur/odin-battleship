@@ -1,53 +1,19 @@
 import { Ship } from "./ship.js";
 
-function createShip(length) {
-  return new Ship(length);
-}
-
 class Gameboard {
-  constructor(createShipFn = createShip) {
+  constructor(createShip = Ship) {
+    this.createShip = createShip;
     this.board = Array(10)
       .fill()
       .map(() => Array(10).fill(null));
-    this.createShipFn = createShipFn;
     this.ships = [];
   }
 
   placeShip(length, x, y, direction) {
-    let newShip = this.createShipFn(length);
+    this.#checkPlacement(length, x, y, direction);
+    let newShip = this.createShip(length);
 
-    if (direction === "horizontal") {
-      for (let i = x; i < x + length; i++) {
-        if (this.isOccupied(i, y)) {
-          throw new Error("At least one of these spaces is already occupied!");
-        }
-      }
-      for (let i = x; i < x + length; i++) {
-        this.board[x][y] = newShip;
-      }
-    } else if (direction === "vertical") {
-      for (let i = y; i < y + length; i++) {
-        if (this.isOccupied(x, i)) {
-          throw new Error("At least one of these spaces is already occupied!");
-        }
-      }
-      for (let i = y; i < y + length; i++) {
-        this.board[x][y] = newShip;
-      }
-    }
-
-    // for (let i = 0; i < length; i++) {
-    //   if (this.isOccupied(x, y)) {
-    //     throw new Error("At least one of these spaces is already occupied!");
-    //   }
-    //   if (direction === "horizontal") {
-    //     y++;
-    //   } else x++;
-    // }
-
-    // let newShip = this.createShipFn(length);
-
-    for (let j = 0; j < length; j++) {
+    for (let i = 0; i < length; i++) {
       this.board[x][y] = newShip;
       if (direction === "horizontal") {
         y++;
@@ -55,6 +21,20 @@ class Gameboard {
     }
 
     this.ships.push(newShip);
+  }
+
+  #checkPlacement(length, x, y, direction) {
+    for (let i = 0; i < length; i++) {
+      if (x > 9 || y > 9 || x < 0 || y < 0) {
+        throw new Error("Ship cannot be placed out of bounds.");
+      }
+      if (this.isOccupied(x, y)) {
+        throw new Error("At least one of these spaces is already occupied.");
+      }
+      if (direction === "horizontal") {
+        y++;
+      } else x++;
+    }
   }
 
   isOccupied(x, y) {

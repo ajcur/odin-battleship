@@ -48,16 +48,27 @@ test("Gameboard can report if all its ships are sunk", () => {
   test.placeShip(1, 0, 0, "horizontal");
   test.placeShip(2, 4, 2, "vertical");
   test.board[0][0].sunk = true;
-  test.board[4][2].sunk = true;
+  test.board[5][2].sunk = true;
   expect(test.allSunk()).toBe(true);
 });
 
 test("Gameboard throws an Error if a ship is placed in an occupied position", () => {
   let test = new Gameboard(fakeCreateShipFn);
   test.placeShip(3, 0, 0, "horizontal");
-  expect(() => test.placeShip(2, 0, 1, "horizontal")).toThrow(Error);
+  expect(() => test.placeShip(2, 0, 1, "horizontal")).toThrow(
+    "At least one of these spaces is already occupied.",
+  );
 });
 
-test.todo("Gameboard throws an Error if a ship is placed outside of bounds");
+test("Gameboard throws an Error if a ship is placed out of bounds", () => {
+  let test = new Gameboard(fakeCreateShipFn);
+  expect(() => test.placeShip(3, 8, 2, "vertical")).toThrow(
+    "Ship cannot be placed out of bounds.",
+  );
+});
 
-test.todo("Positions immediately surrounding a ship are marked as boundary");
+// test.todo("Positions immediately surrounding a ship are marked as boundary", () => {
+//   let test = new Gameboard(fakeCreateShipFn);
+//   test.placeShip(3, 1, 0, "horizontal");
+//   expect(() => test.placeShip(3, 0, 2, "horizontal")).toThrow("Ship cannot be placed right next to another.")
+// });
