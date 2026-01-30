@@ -3,7 +3,7 @@ import { Player } from "./player";
 const player1 = new Player("human");
 const player2 = new Player("human");
 
-const players = [player1, player2];
+let players = [player1, player2];
 
 player1.gameboard.placeShip(2, 0, 0, "horizontal");
 player1.gameboard.placeShip(2, 0, 7, "horizontal");

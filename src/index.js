@@ -1,5 +1,5 @@
 import "./styles.css";
-import { players } from "./gameplay";
+import { players } from "./runGame";
 import { DOMGameboard } from "./DOMgameboard";
 
 players.forEach((player) => {
