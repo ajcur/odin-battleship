@@ -1,14 +1,14 @@
 const gameArea = document.querySelector("#game-area");
 
-function createGameboardElement() {
-  let newGameboardElement = document.createElement("div");
-  newGameboardElement.classList.add("gameboard");
-  gameArea.appendChild(newGameboardElement);
-  return newGameboardElement;
+function createDisplayElement() {
+  let newDisplayElement = document.createElement("div");
+  newDisplayElement.classList.add("gameboard");
+  gameArea.appendChild(newDisplayElement);
+  return newDisplayElement;
 }
 
-class DOMGameboard {
-  constructor(player, element = createGameboardElement()) {
+class Display {
+  constructor(player, element = createDisplayElement()) {
     this.player = player;
     this.element = element;
     this.squares = this.#createAllSquares();
@@ -35,13 +35,14 @@ class DOMGameboard {
   }
 
   renderSquare(x, y) {
+    if (this.player.gameboard.board[x][y].hit) {
+      this.squares[x][y].classList.add("hit");
+    }
     if (this.player.gameboard.isOccupied(x, y)) {
       this.squares[x][y].classList.add("ship");
-      if (this.player.gameboard.board[x][y].sunk === true) {
+      if (this.player.gameboard.board[x][y].ship.sunk === true) {
         this.squares[x][y].classList.add("sunk");
       }
-    } else if (this.player.gameboard.board[x][y] === "miss") {
-      this.squares[x][y].classList.add("miss");
     }
   }
 
@@ -54,4 +55,4 @@ class DOMGameboard {
   }
 }
 
-export { DOMGameboard };
+export { Display };

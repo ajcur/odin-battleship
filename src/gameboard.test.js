@@ -15,7 +15,8 @@ test("Gameboard can be created", () => {
 
 test("Board positions can be accessed", () => {
   let test = new Gameboard(fakeCreateShipFn);
-  expect(test.board[0][0]).toBeNull();
+  expect(test.board[0][0].ship).toBeNull();
+  expect(test.board[0][0].hit).toBe(false);
 });
 
 test("Ship can be placed", () => {
@@ -27,7 +28,8 @@ test("Ship can be placed", () => {
 test("Attacks on unoccupied positions record as missedAttack", () => {
   let test = new Gameboard(fakeCreateShipFn);
   test.receiveAttack(0, 4);
-  expect(test.board[0][4]).toBe("miss");
+  expect(test.board[0][4].ship).toBeNull();
+  expect(test.board[0][4].hit).toBe(true);
 });
 
 test("Attacks on previously attacked positions throw an Error", () => {
@@ -40,15 +42,15 @@ test("Attacks on occupied positions send an attack to that ship", () => {
   let test = new Gameboard(fakeCreateShipFn);
   test.placeShip(3, 0, 4, "vertical");
   test.receiveAttack(2, 4);
-  expect(test.board[1][4].hit).toHaveBeenCalled();
+  expect(test.board[1][4].ship.hit).toHaveBeenCalled();
 });
 
 test("Gameboard can report if all its ships are sunk", () => {
   let test = new Gameboard(fakeCreateShipFn);
   test.placeShip(1, 0, 0, "horizontal");
   test.placeShip(2, 4, 2, "vertical");
-  test.board[0][0].sunk = true;
-  test.board[5][2].sunk = true;
+  test.board[0][0].ship.sunk = true;
+  test.board[5][2].ship.sunk = true;
   expect(test.allSunk()).toBe(true);
 });
 
@@ -66,9 +68,3 @@ test("Gameboard throws an Error if a ship is placed out of bounds", () => {
     "Ship cannot be placed out of bounds.",
   );
 });
-
-// test.todo("Positions immediately surrounding a ship are marked as boundary", () => {
-//   let test = new Gameboard(fakeCreateShipFn);
-//   test.placeShip(3, 1, 0, "horizontal");
-//   expect(() => test.placeShip(3, 0, 2, "horizontal")).toThrow("Ship cannot be placed right next to another.")
-// });

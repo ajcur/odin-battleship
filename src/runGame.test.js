@@ -1,5 +1,3 @@
-// import { player1, player2 } from "./index";
-
 describe("Test game logic", () => {
   beforeEach(() => {
     jest.resetModules();
@@ -9,8 +7,8 @@ describe("Test game logic", () => {
     const { player1 } = require("./runGame.js");
     player1.gameboard.receiveAttack(7, 0);
     player1.gameboard.receiveAttack(2, 6);
-    expect(player1.gameboard.board[7][1].timesHit).toBe(1);
-    expect(player1.gameboard.board[2][6].sunk).toBe(true);
+    expect(player1.gameboard.board[7][1].ship.timesHit).toBe(1);
+    expect(player1.gameboard.board[2][6].ship.sunk).toBe(true);
   });
 
   test("Hits register correctly on player2", () => {
@@ -18,19 +16,20 @@ describe("Test game logic", () => {
     player2.gameboard.receiveAttack(2, 2);
     player2.gameboard.receiveAttack(5, 5);
     player2.gameboard.receiveAttack(5, 6);
-    expect(player2.gameboard.board[2][2].timesHit).toBe(1);
-    expect(player2.gameboard.board[5][5].sunk).toBe(true);
+    expect(player2.gameboard.board[2][2].ship.timesHit).toBe(1);
+    expect(player2.gameboard.board[5][5].ship.sunk).toBe(true);
   });
 
   test("Misses register correctly on player1", () => {
     const { player1 } = require("./runGame.js");
     player1.gameboard.receiveAttack(3, 0);
-    expect(player1.gameboard.board[3][0]).toBe("miss");
+    expect(player1.gameboard.board[3][0].ship).toBeNull();
+    expect(player1.gameboard.board[3][0].hit).toBe(true);
   });
 
   test("Tests don't interfere with each other", () => {
     const { player1 } = require("./runGame.js");
-    expect(player1.gameboard.board[2][6].sunk).toBe(false);
+    expect(player1.gameboard.board[2][6].ship.sunk).toBe(false);
   });
 
   test("Gameboard reports correctly when all ships are sunk", () => {

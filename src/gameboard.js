@@ -3,10 +3,24 @@ import { Ship } from "./ship.js";
 class Gameboard {
   constructor(createShip = Ship) {
     this.createShip = createShip;
-    this.board = Array(10)
-      .fill()
-      .map(() => Array(10).fill(null));
+    this.board = this.#createBoard();
     this.ships = [];
+  }
+
+  #createBoard() {
+    let board = [];
+    for (let i = 0; i < 10; i++) {
+      let row = [];
+      for (let j = 0; j < 10; j++) {
+        let field = {
+          ship: null,
+          hit: false,
+        };
+        row.push(field);
+      }
+      board.push(row);
+    }
+    return board;
   }
 
   placeShip(length, x, y, direction) {
@@ -14,7 +28,7 @@ class Gameboard {
     let newShip = new this.createShip(length);
 
     for (let i = 0; i < length; i++) {
-      this.board[x][y] = newShip;
+      this.board[x][y].ship = newShip;
       if (direction === "horizontal") {
         y++;
       } else x++;
@@ -38,16 +52,17 @@ class Gameboard {
   }
 
   isOccupied(x, y) {
-    return this.board[x][y] !== null && this.board[x][y] !== "miss";
+    return this.board[x][y].ship !== null;
   }
 
   receiveAttack(x, y) {
-    if (this.board[x][y] === "miss") {
+    if (this.board[x][y].hit) {
       throw new Error("This field has already been hit.");
     }
     if (this.isOccupied(x, y)) {
-      this.board[x][y].hit();
-    } else this.board[x][y] = "miss";
+      this.board[x][y].ship.hit();
+    }
+    this.board[x][y].hit = true;
   }
 
   allSunk() {
