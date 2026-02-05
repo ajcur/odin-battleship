@@ -1,7 +1,7 @@
 import { Player } from "./player";
 
-const player1 = new Player("human");
-const player2 = new Player("human");
+const player1 = new Player("A", "human");
+const player2 = new Player("B", "human");
 
 let players = [player1, player2];
 

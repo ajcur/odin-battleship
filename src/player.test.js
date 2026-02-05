@@ -15,11 +15,11 @@ test("Player can be created", () => {
 });
 
 test("Player type can be set", () => {
-  let test = new Player("human");
+  let test = new Player("A", "human");
   expect(test.type).toBe("human");
 });
 
 test("Player has a gameboard object", () => {
-  let test = new Player("human", fakeCreateGameboardFn);
+  let test = new Player("A", "human", fakeCreateGameboardFn);
   expect(test.gameboard.board[0][0]).toBeNull();
 });

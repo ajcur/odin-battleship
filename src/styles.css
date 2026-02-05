@@ -100,3 +100,15 @@ h6 {
 .gameboard-square.ship {
   background-color: lightblue;
 }
+
+.gameboard-square.hidden {
+  background-color: grey;
+}
+
+.gameboard-square.hit {
+  background-color: red;
+}
+
+.gameboard-square.hit.ship {
+  background-color: darkred;
+}

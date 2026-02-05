@@ -12,7 +12,6 @@ class DOMGameboard {
     this.player = player;
     this.element = element;
     this.squares = this.#createAllSquares();
-    this.#renderAllSquares();
   }
 
   #createSquare() {
@@ -46,7 +45,7 @@ class DOMGameboard {
     }
   }
 
-  #renderAllSquares() {
+  renderAllSquares() {
     for (let x = 0; x < 10; x++) {
       for (let y = 0; y < 10; y++) {
         this.renderSquare(x, y);
