@@ -8,8 +8,8 @@ function createDisplayElement() {
 }
 
 class Display {
-  constructor(player, element = createDisplayElement()) {
-    this.player = player;
+  constructor(gameboard, element = createDisplayElement()) {
+    this.gameboard = gameboard;
     this.element = element;
     this.squares = this.#createAllSquares();
   }
@@ -35,12 +35,12 @@ class Display {
   }
 
   renderSquare(x, y) {
-    if (this.player.gameboard.board[x][y].hit) {
+    if (this.gameboard.board[x][y].hit) {
       this.squares[x][y].classList.add("hit");
     }
-    if (this.player.gameboard.isOccupied(x, y)) {
+    if (this.gameboard.isOccupied(x, y)) {
       this.squares[x][y].classList.add("ship");
-      if (this.player.gameboard.board[x][y].ship.sunk === true) {
+      if (this.gameboard.board[x][y].ship.sunk === true) {
         this.squares[x][y].classList.add("sunk");
       }
     }

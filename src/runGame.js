@@ -1,30 +1,58 @@
-import { Player } from "./player";
+import { Display } from "./display";
 
-const player1 = new Player("A", "human");
-const player2 = new Player("B", "human");
+function startGame(players) {
+  let activePlayer = players[0];
+  let inactivePlayer = players.find((player) => player !== activePlayer);
 
-let players = [player1, player2];
+  players.forEach((player) => {
+    player.gameboard.display = new Display(player.gameboard);
+    player.gameboard.display.renderAllSquares();
+  });
 
-player1.gameboard.placeShip(2, 0, 0, "horizontal");
-player1.gameboard.placeShip(2, 0, 7, "horizontal");
-player1.gameboard.placeShip(2, 2, 4, "vertical");
-player1.gameboard.placeShip(1, 2, 6, "horizontal");
-player1.gameboard.placeShip(1, 2, 8, "horizontal");
-player1.gameboard.placeShip(1, 4, 2, "horizontal");
-player1.gameboard.placeShip(4, 6, 5, "vertical");
-player1.gameboard.placeShip(3, 6, 7, "horizontal");
-player1.gameboard.placeShip(3, 7, 0, "horizontal");
-player1.gameboard.placeShip(1, 9, 8, "horizontal");
+  for (let x = 0; x < 10; x++) {
+    for (let y = 0; y < 10; y++) {
+      inactivePlayer.gameboard.display.squares[x][y].classList.add("hidden");
+    }
+  }
 
-player2.gameboard.placeShip(1, 0, 5, "horizontal");
-player2.gameboard.placeShip(1, 2, 2, "horizontal");
-player2.gameboard.placeShip(3, 3, 4, "horizontal");
-player2.gameboard.placeShip(3, 3, 8, "vertical");
-player2.gameboard.placeShip(1, 5, 0, "horizontal");
-player2.gameboard.placeShip(2, 5, 5, "horizontal");
-player2.gameboard.placeShip(2, 6, 2, "horizontal");
-player2.gameboard.placeShip(4, 7, 5, "horizontal");
-player2.gameboard.placeShip(2, 8, 0, "vertical");
-player2.gameboard.placeShip(1, 9, 2, "horizontal");
+  players.forEach((player) => {
+    player.gameboard.display.element.addEventListener("click", (e) => {
+      if (player === activePlayer) {
+        return;
+      }
 
-export { player1, player2, players };
+      let x, y;
+      inactivePlayer.gameboard.display.squares.map((row) => {
+        if (row.includes(e.target)) {
+          x = inactivePlayer.gameboard.display.squares.indexOf(row);
+          y = row.indexOf(e.target);
+        }
+      });
+
+      inactivePlayer.gameboard.receiveAttack(x, y);
+      inactivePlayer.gameboard.display.renderSquare(x, y);
+      e.target.classList.add("hit");
+
+      if (inactivePlayer.gameboard.allSunk()) {
+        alert(`Congratulations! ${activePlayer.name} wins!`);
+        return;
+      }
+
+      activePlayer = inactivePlayer;
+      inactivePlayer = players.find((player) => player !== activePlayer);
+
+      for (let x = 0; x < 10; x++) {
+        for (let y = 0; y < 10; y++) {
+          activePlayer.gameboard.display.squares[x][y].classList.remove(
+            "hidden",
+          );
+          inactivePlayer.gameboard.display.squares[x][y].classList.add(
+            "hidden",
+          );
+        }
+      }
+    });
+  });
+}
+
+export { startGame };
