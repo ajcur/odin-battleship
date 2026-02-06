@@ -6,6 +6,34 @@
     <title>Battleship</title>
   </head>
   <body>
-    <div id="game-area"></div>
+    <button id="new-game-button">New Game</button>
+
+    <dialog id="new-game-window">
+      <form method="dialog" class="new-game-form">
+        <div class="inputs">
+          <div id="vs-selection">
+            <input type="radio" id="vs-computer" name="vs-selection" />
+            <label for="vs-computer">vs. Computer</label>
+            <input type="radio" id="vs-other-player" name="vs-selection" />
+            <label for="vs-other-player">vs. Other Player</label>
+          </div>
+          <label id="p1-name-label" for="player-1-name">Player Name:</label>
+          <input type="text" id="player-1-name" name="player-1-name" required />
+          <label id="p2-name-label" for="player-2-name" hidden
+            >Player 2 Name:</label
+          >
+          <input type="text" id="player-2-name" name="player-2-name" hidden />
+        </div>
+        <div class="buttons">
+          <button type="submit" id="ok-button">OK</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="screen-area">
+      <div id="game-area"></div>
+      <button id="shuffle-button">Shuffle</button>
+      <button id="start-button">Start Game</button>
+    </div>
   </body>
 </html>

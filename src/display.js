@@ -35,6 +35,7 @@ class Display {
   }
 
   renderSquare(x, y) {
+    this.squares[x][y].classList.remove("hit", "ship", "sunk");
     if (this.gameboard.board[x][y].hit) {
       this.squares[x][y].classList.add("hit");
     }

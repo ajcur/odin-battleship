@@ -74,12 +74,16 @@ h6 {
   isolation: isolate;
 }
 
+#screen-area {
+  height: 100vh;
+}
+
 #game-area {
   justify-items: center;
   align-items: center;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  height: 100vh;
+  height: 60vh;
   width: 100vw;
   gap: 30px;
 }

@@ -59,6 +59,7 @@ class Gameboard {
 
   placeShipsRandomly() {
     this.board = this.#createBoard();
+    this.ships = [];
 
     let shipsToPlace = [1, 1, 1, 1, 2, 2, 2, 3, 3, 4];
 

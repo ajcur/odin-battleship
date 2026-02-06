@@ -1,5 +1,8 @@
 import { Display } from "./display";
 
+let activePlayer;
+let inactivePlayer;
+
 function computerMove(inactivePlayer) {
   let possibleMoves = [];
   for (let x = 0; x < 10; x++) {
@@ -20,21 +23,24 @@ function computerMove(inactivePlayer) {
   chosenSquare.dispatchEvent(clickEvent);
 }
 
-function startGame(players) {
-  let activePlayer = players[0];
-  let inactivePlayer = players.find((player) => player !== activePlayer);
-
+function setupGame(players) {
   players.forEach((player) => {
+    player.gameboard.placeShipsRandomly();
     player.gameboard.display = new Display(player.gameboard);
     player.gameboard.display.renderAllSquares();
   });
+
+  activePlayer = players[0];
+  inactivePlayer = players.find((player) => player !== activePlayer);
 
   for (let x = 0; x < 10; x++) {
     for (let y = 0; y < 10; y++) {
       inactivePlayer.gameboard.display.squares[x][y].classList.add("hidden");
     }
   }
+}
 
+function startGame(players) {
   if (activePlayer.type === "computer") {
     computerMove(inactivePlayer);
   }
@@ -83,4 +89,4 @@ function startGame(players) {
   });
 }
 
-export { startGame };
+export { startGame, setupGame };

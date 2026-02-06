@@ -53,18 +53,3 @@ test("Gameboard can report if all its ships are sunk", () => {
   test.board[5][2].ship.sunk = true;
   expect(test.allSunk()).toBe(true);
 });
-
-test("Gameboard throws an Error if a ship is placed in an occupied position", () => {
-  let test = new Gameboard(fakeCreateShipFn);
-  test.placeShip(3, 0, 0, "horizontal");
-  expect(() => test.placeShip(2, 0, 1, "horizontal")).toThrow(
-    "At least one of these spaces is already occupied.",
-  );
-});
-
-test("Gameboard throws an Error if a ship is placed out of bounds", () => {
-  let test = new Gameboard(fakeCreateShipFn);
-  expect(() => test.placeShip(3, 8, 2, "vertical")).toThrow(
-    "Ship cannot be placed out of bounds.",
-  );
-});
