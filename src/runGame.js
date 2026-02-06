@@ -1,5 +1,25 @@
 import { Display } from "./display";
 
+function computerMove(inactivePlayer) {
+  let possibleMoves = [];
+  for (let x = 0; x < 10; x++) {
+    for (let y = 0; y < 10; y++) {
+      if (!inactivePlayer.gameboard.board[x][y].hit) {
+        possibleMoves.push(inactivePlayer.gameboard.display.squares[x][y]);
+      }
+    }
+  }
+
+  let chosenMoveIndex = Math.floor(Math.random() * possibleMoves.length);
+  let chosenSquare = possibleMoves[chosenMoveIndex];
+
+  let clickEvent = new MouseEvent("click", {
+    bubbles: true,
+  });
+
+  chosenSquare.dispatchEvent(clickEvent);
+}
+
 function startGame(players) {
   let activePlayer = players[0];
   let inactivePlayer = players.find((player) => player !== activePlayer);
@@ -13,6 +33,10 @@ function startGame(players) {
     for (let y = 0; y < 10; y++) {
       inactivePlayer.gameboard.display.squares[x][y].classList.add("hidden");
     }
+  }
+
+  if (activePlayer.type === "computer") {
+    computerMove(inactivePlayer);
   }
 
   players.forEach((player) => {
@@ -50,6 +74,10 @@ function startGame(players) {
             "hidden",
           );
         }
+      }
+
+      if (activePlayer.type === "computer") {
+        computerMove(inactivePlayer);
       }
     });
   });
